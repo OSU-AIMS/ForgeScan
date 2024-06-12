@@ -11,7 +11,7 @@ import random
 
 ## ----------------------- LOCATE EXECUTABLE FILES AND GROUND TRUTH DATA ----------------------- ##
 
-HDF5_EXTENSION  = ".h5"
+HDF5_EXTENSION  = ".hdf5"
 EXECUTABLE_NAME = 'RunExperiment'
 EXECUTABLE_PATH = None
 TRUTH_FILES = ["box"]

@@ -7,8 +7,7 @@ int main(const int argc, const char **argv)
 {
     forge_scan::utilities::ArgParser parser(argc, argv);
 
-    std::filesystem::path fpath   = parser.get<std::filesystem::path>("--save", FORGE_SCAN_SHARE_DIR "/Examples/Scene.h5");
-
+    std::filesystem::path fpath = parser.get<std::filesystem::path>("--save", FORGE_SCAN_SHARE_DIR "/Examples/Scene.h5");
 
     // ************************************ Set up a scene ************************************* //
 
@@ -22,20 +21,20 @@ int main(const int argc, const char **argv)
     scene->add("--file abc4.stl --z  0.5 --scale  8.0");
 
 
-    // ****************************** Calculate the ground truth ******************************* //
+    // // ****************************** Calculate the ground truth ******************************* //
 
     scene->calculateGroundTruthOccupancy();
     scene->calculateGroundTruthTSDF();
 
 
-    // **************************** Write the scene to an HDF5 file **************************** //
+    // // **************************** Write the scene to an HDF5 file **************************** //
 
     auto updated_fpath = scene->save(fpath);
-    std::cout << "Scene contains: \n" << *scene << std::endl; 
+    std::cout << "Scene contains: \n" << *scene << std::endl;
     std::cout << "Saved scene at " << updated_fpath << std::endl;
 
 
-    // *********************** Verify that we can re-load the HDF5 file ************************ //
+    // // *********************** Verify that we can re-load the HDF5 file ************************ //
 
     scene->load(updated_fpath);
 
@@ -43,7 +42,7 @@ int main(const int argc, const char **argv)
     scene2->load(updated_fpath);
 
     std::cout << "Success! Reloaded the scene." << std::endl;
-    std::cout << "Reloaded scene contains: \n" << *scene << std::endl; 
+    std::cout << "Reloaded scene contains: \n" << *scene << std::endl;
 
     return 0;
 }

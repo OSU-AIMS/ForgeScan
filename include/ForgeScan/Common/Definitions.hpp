@@ -32,7 +32,7 @@
 #define FS_METRIC_CHANNEL_PREFIX_C_STR_LEN 7
 
 // Define the HDF5 file extension for this header file only.
-#define FS_HDF5_FILE_EXTENSION ".h5"
+#define FS_HDF5_FILE_EXTENSION ".hdf5"
 
 // Define the XDMF file extension for this header file only.
 #define FS_XDMF_FILE_EXTENSION ".xdmf"

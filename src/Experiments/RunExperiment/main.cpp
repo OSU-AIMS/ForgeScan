@@ -132,8 +132,8 @@ int main()
     forge_scan::utilities::ArgParser parser;
 
 
-    static const std::string default_scene_file_path = FORGE_SCAN_SHARE_DIR "/Examples/Scene.h5";
-    static const std::string default_file_path = "ExperimentResults.h5";
+    static const std::string default_scene_file_path = FORGE_SCAN_SHARE_DIR "/Examples/Scene.hdf5";
+    static const std::string default_file_path = "ExperimentResults.hdf5";
 
     parser.getInput("Enter a file path for this experiment data:");
     std::filesystem::path fpath = parser.get<std::string>(0, default_file_path);

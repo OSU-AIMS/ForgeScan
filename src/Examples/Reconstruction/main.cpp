@@ -13,8 +13,8 @@ int main(const int argc, const char **argv)
     const bool  save_im       = parser.has("--save-im");
     const float noise         = parser.get<float>("--noise", 0.0f);
 
-    std::filesystem::path scene_fpath = parser.get<std::filesystem::path>("--scene", FORGE_SCAN_SHARE_DIR "/Examples/Scene.h5");
-    std::filesystem::path save_fpath  = parser.get<std::filesystem::path>("--save",  FORGE_SCAN_SHARE_DIR "/Examples/Reconstruction.h5");
+    std::filesystem::path scene_fpath = parser.get<std::filesystem::path>("--scene", FORGE_SCAN_SHARE_DIR "/Examples/Scene.hdf5");
+    std::filesystem::path save_fpath  = parser.get<std::filesystem::path>("--save",  FORGE_SCAN_SHARE_DIR "/Examples/Reconstruction.hdf5");
     std::filesystem::path image_fpath = save_fpath;
     const std::string image_prefix    = save_fpath.filename().replace_extension("").string() + "View";
 
