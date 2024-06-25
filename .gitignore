@@ -4,6 +4,11 @@
 bin/*
 lib/*
 build/*
+install/*
+share/*
+.idea/*
+.vscode/*
+log/*
 scripts/plots/*
 .vscode/*
 .devcontainer/*
