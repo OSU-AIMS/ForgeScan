@@ -1,0 +1,6 @@
+int64 width
+int64 height
+float64 mindepth
+float64 maxdepth
+float64 fovx
+float64 fovy

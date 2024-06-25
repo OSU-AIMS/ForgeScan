@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+
+<robot name="scene" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Setup -->
+    <material name="environment_grey">
+        <color rgba="0.7 0.7 0.7 1"/>
+    </material>
+    <material name="environment_black">
+        <color rgba="0.3 0.3 0.3 1"/>
+    </material>
+    <material name="testing_red">
+        <color rgba="1.0 0.0 0.0 0.0"/>
+    </material>
+
+
+    <!-- Global Origin -->
+    <link name="world" />
+
+
+    <!-- Robot -->
+    <xacro:include filename="$(find motoman_resources)/urdf/common_materials.xacro"/>
+    <xacro:include filename="$(find motoman_ms210_support)/urdf/ms210.xacro" />
+    <joint name="fix_origin_ms210" type="fixed">
+      <origin xyz="0 0 0.127" rpy="0 0 0"/>
+      <parent link="world"/>
+      <child  link="base_link"/>
+    </joint>
+
+    <!-- Skid-plate riser, CDME custom made -->
+    <link  name="ms210_riser">
+        <visual>
+            <origin xyz="0 0 -0.127" rpy="0 0 ${radians(-90)}" />
+            <geometry>
+                <mesh
+                filename="file://$(find forgescan_support)/meshes/riser_ms210_visual.stl" />
+            </geometry>
+            <material name="environment_black" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 -0.127" rpy="0 0 ${radians(-90)}" />
+            <geometry>
+                <mesh filename="file://$(find forgescan_support)/meshes/riser_ms210_collision.stl" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="fix_ms210_riser" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="ms210_riser" />
+    </joint>
+
+
+    <!-- Rough Collision Block Floor -->
+    <link name="floor">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.01" radius="4" />
+        </geometry>
+        <xacro:material_yaskawa_white/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.01" radius="5" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="fix_floor" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="world" />
+      <child  link="floor" />
+    </joint>
+
+  <link name="compliance_device">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 ${-pi/2}"/>
+      <geometry>
+        <mesh filename="file://$(find forgescan_support)/meshes/compliance_device_visual.stl" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 ${-pi/2}"/>
+      <geometry>
+        <mesh filename="file://$(find forgescan_support)/meshes/compliance_device_collision.stl" />
+      </geometry>
+    </collision>
+  </link>  
+  <joint name="compliance_device_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="link_6_t"/>
+    <child link="compliance_device"/>
+  </joint>
+
+  <link name="object_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+  </link>
+  <joint name="object_link_joint" type="fixed">
+    <origin xyz="0.5425 0 0" rpy="0 0 0"/>
+    <parent link="compliance_device"/>
+    <child link="object_link"/>
+  </joint>
+
+
+  <link name="object_bounding_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+  </link>
+  <joint name="object_bounding_joint" type="fixed">
+    <origin xyz="0 -0.2 -0.2" rpy="0 0 0"/>
+    <parent link="object_link"/>
+    <child link="object_bounding_link"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="1.5 1.5 1.5" rpy="0 0 ${5*pi/4}"/>
+    <parent link="world"/>
+    <child link="camera_link"/>
+  </joint>
+
+</robot>
