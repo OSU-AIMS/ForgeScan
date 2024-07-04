@@ -17,6 +17,8 @@
 #include "tf2_ros/buffer.h"
 
 #include "forgescan_realsense/msg/intrinsics.hpp"
+#include "forgescan_realsense/srv/intrinsics.hpp"
+#include "forgescan_realsense/srv/to_transform.hpp"
 
 using namespace std::chrono_literals;
 
@@ -26,36 +28,46 @@ class RealsenseHandler : public rclcpp::Node
         RealsenseHandler()
         : Node("realsense_handler")
         {
-            intrinsics_publisher = this->create_publisher<forgescan_realsense::msg::Intrinsics>("camera/forgescan_realsense/camera_intrinsics", 10);
             camera_intrinsics_subscriber = this->create_subscription<sensor_msgs::msg::CameraInfo>(
-            "camera/camera/depth/camera_info", 10, std::bind(&RealsenseHandler::intrinsics_callback, this, std::placeholders::_1));
-
+            "camera/camera/depth/camera_info", 10, std::bind(&RealsenseHandler::realsense_intrinsics_callback, this, std::placeholders::_1));
+            intrinsics_service = this->create_service<forgescan_realsense::srv::Intrinsics>(
+                "camera/forgescan_realsense/camera_intrinsics", std::bind(&RealsenseHandler::intrinsics_callback, this, std::placeholders::_1, std::placeholders::_2));
+            tf_service = this->create_service<forgescan_realsense::srv::ToTransform>(
+                "camera/forgescan_realsense/camera_transform", std::bind(&RealsenseHandler::get_transform, this, std::placeholders::_1, std::placeholders::_2));
             tf_buffer_ =
                 std::make_unique<tf2_ros::Buffer>(this->get_clock());
             tf_listener_ = 
                 std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-            timer_ = this->create_wall_timer(
-                1s, std::bind(&RealsenseHandler::get_transform, this));
-            tf_publisher = this-> create_publisher<geometry_msgs::msg::TransformStamped>("camera/forgescan_realsense/camera_transform", 1);
         }
 
     private:
-        void intrinsics_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg)
+        void intrinsics_callback(const std::shared_ptr<forgescan_realsense::srv::Intrinsics::Request> request,
+                std::shared_ptr<forgescan_realsense::srv::Intrinsics::Response> response)
         {
-            auto message = forgescan_realsense::msg::Intrinsics();
+            response->width = message.width;
+            response->height = message.height;
+            response->mindepth = message.mindepth;
+            response->maxdepth = message.maxdepth;
+            response->fovx = message.fovx;
+            response->fovy = message.fovy;
+        }
+
+        void realsense_intrinsics_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg)
+        {
             message.width = msg->width;
             message.height = msg->height;
             message.mindepth = 0.6; //Set due to this only being avaible through website and not message.
             message.maxdepth = 6.0; //Same as above
             message.fovx = (2 * atan ((message.width)/(2*msg->k[0]))) * 180 / M_PI;
             message.fovy = (2 * atan ((message.height)/(2*msg->k[4]))) * 180 / M_PI;
-            this->intrinsics_publisher->publish(message);
         }
 
-        void get_transform()
+        void get_transform(const std::shared_ptr<forgescan_realsense::srv::ToTransform::Request> request,
+                std::shared_ptr<forgescan_realsense::srv::ToTransform::Response> response)
         {
-            std::string fromFrameRel = "object_bounding_link";
-            std::string toFrameRel = "camera_link";
+            std::string toFrameRel = request->toframe != "" ? request-> toframe : "camera_link";
+
+            std::string fromFrameRel = request->fromframe != "" ? request->fromframe : "object_bounding_link";
 
             geometry_msgs::msg::TransformStamped t;
 
@@ -66,16 +78,15 @@ class RealsenseHandler : public rclcpp::Node
                 RCLCPP_INFO( this->get_logger(), "Could not transform %s to %s: %s", toFrameRel.c_str(), fromFrameRel.c_str(), ex.what());
                 return;
             }
-            tf_publisher->publish(t);
-
+            response->transform = t.transform;
         }
     rclcpp::Publisher<forgescan_realsense::msg::Intrinsics>::SharedPtr intrinsics_publisher;
     rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_intrinsics_subscriber;
-    rclcpp::Publisher<geometry_msgs::msg::TransformStamped>::SharedPtr tf_publisher;
+    rclcpp::Service<forgescan_realsense::srv::ToTransform>::SharedPtr tf_service;
+    rclcpp::Service<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_service;
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
-    std::string target_frame;
-    rclcpp::TimerBase::SharedPtr timer_{nullptr};
+    forgescan_realsense::msg::Intrinsics message;
 };
 
 int main(int argc, char * argv[])

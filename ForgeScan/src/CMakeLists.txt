@@ -12,8 +12,8 @@ target_compile_definitions(
     INTERFACE
         # The below two paths are absolute paths, needs to be changed to relative pathing later but for purposes of
         # testing ForgeScan as a whole.
-        FORGE_SCAN_SHARE_DIR="/home/bturner86239/forgescan_ws/ForgeScan/share"
-        FORGE_SCAN_MESHES_DIR="/home/bturner86239/forgescan_ws/ForgeScan/share/Meshes"
+        FORGE_SCAN_SHARE_DIR="/home/bturner86239/forgescan_ws/src/ForgeScan/share"
+        FORGE_SCAN_MESHES_DIR="/home/bturner86239/forgescan_ws/src/ForgeScan/share/Meshes"
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
