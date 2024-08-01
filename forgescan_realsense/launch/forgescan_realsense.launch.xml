@@ -24,4 +24,8 @@
     <node pkg="realsense2_camera" exec="realsense2_camera_node">
         <remap from="/camera/camera/depth/image_rect_raw" to="forgescan_realsense/camera_image"/>
     </node>
+
+    <node pkg="forgescan_realsense" exec="realsense_handler"/>
+    <node pkg="forgescan_realsense" exec="scan_manager"/>
+    <node pkg="forgescan_realsense" exec="scan_image"/>
 </launch>

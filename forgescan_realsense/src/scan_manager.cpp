@@ -3,6 +3,7 @@
 
 #include "ForgeScan/Sensor/DepthImageProccessing.hpp"
 #include "ForgeScan/Utilities/Timer.hpp"
+#include "ForgeScan/Sensor/Camera.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_srvs/srv/empty.hpp"
@@ -11,6 +12,7 @@
 #include "geometry_msgs/msg/quaternion.hpp"
 
 #include "forgescan_realsense/srv/camera_pose.hpp"
+#include "forgescan_realsense/srv/intrinsics.hpp"
 
 class ScanManager : public rclcpp::Node
 {
@@ -28,8 +30,35 @@ class ScanManager : public rclcpp::Node
             std::shared_ptr<std_srvs::srv::Empty::Response> response)
         {
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("image_client");
-            rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr client = node->create_client<forgescan_realsense::srv::CameraPose>("/camera/forgescan_realsense/camera_capture");
+            rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client = node->create_client<forgescan_realsense::srv::CameraPose>("/camera/forgescan_realsense/camera_capture");
+            rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_client = node->create_client<forgescan_realsense::srv::Intrinsics>("/camera/forgescan_realsense/camera_intrinsics");
             auto pose_request = std::make_shared<forgescan_realsense::srv::CameraPose::Request>();
+
+            auto intrinsics_request = std::make_shared<forgescan_realsense::srv::Intrinsics::Request>();
+            auto result = intrinsics_client->async_send_request(intrinsics_request);
+
+            if (result.valid() && rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS) 
+            {
+                auto intrinsics_result = result.get();
+                intr = forge_scan::sensor::Intrinsics::create(intrinsics_result->width, intrinsics_result->height, 
+                                                            intrinsics_result->mindepth, intrinsics_result->maxdepth, 
+                                                            intrinsics_result->fovx, intrinsics_result->fovy);
+                RCLCPP_INFO(this->get_logger(), "Successfully retrieved intrinsics");
+            } 
+            else 
+            {
+                RCLCPP_ERROR(this->get_logger(), "Failed to retrieve intrinsics values, using defaults");
+                intr = forge_scan::sensor::Intrinsics::create();
+            }
+
+            camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
+
+            Eigen::Matrix3f K = Eigen::Matrix3f::Identity();
+
+            K = intr->getMatrix();
+
+            RCLCPP_INFO(this->get_logger(), "f_x: %f, f_y: %f, c_x: %f, c_y: %f", K(0,0), K(1,1), K(0,2), K(1,2));
+
 
             manager->policyAdd("--set-active --type Axis --n-views 7 --n-repeat 3 --x -1.0 --y -1.0 --z -1.0 --seed 50 --uniform");
             while(!manager->policyIsComplete())
@@ -50,21 +79,38 @@ class ScanManager : public rclcpp::Node
                 camera_pose.orientation.w = quat.w();
 
                 pose_request->pose = camera_pose;
-                auto result_future = client->async_send_request(pose_request);
+
+                //Add movement to move robot to position
+
+                auto result_future = image_client->async_send_request(pose_request);
+
+                forge_scan::PointMatrix sensed_points;
 
                 if (rclcpp::spin_until_future_complete(node, result_future) == rclcpp::FutureReturnCode::SUCCESS) 
                 {
                     auto result = result_future.get();
+                    int len = result->length;
+                    sensed_points.resize(3, len);
+                    for(int i = 0; i<len; i++)
+                    {
+                        sensed_points(0, i) = result->eigenmatrix[i].x;
+                        sensed_points(1, i) = result->eigenmatrix[i].y;
+                        sensed_points(2, i) = result->eigenmatrix[i].z;
+                    }
                 } 
                 else 
                 {
                     RCLCPP_ERROR(node->get_logger(), "Failed to capture_image");
                 }
+                manager->reconstructionUpdate(sensed_points, camera->getExtr());
 
                 manager->policyAcceptView();
-                
             }
+            RCLCPP_INFO(this->get_logger(), "Successfully finished Reconstruction");
         }
+
+    std::shared_ptr<forge_scan::sensor::Intrinsics> intr;
+    std::shared_ptr<forge_scan::sensor::Camera> camera;
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr reconstruction_service;
     std::shared_ptr<forge_scan::Manager> manager;
     forge_scan::Extrinsic camera_pose;
