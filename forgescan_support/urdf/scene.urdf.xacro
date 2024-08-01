@@ -20,8 +20,8 @@
 
     <!-- Robot -->
     <xacro:include filename="$(find motoman_resources)/urdf/common_materials.xacro"/>
-    <xacro:include filename="$(find motoman_ms210_support)/urdf/ms210.xacro" />
-    <joint name="fix_origin_ms210" type="fixed">
+    <xacro:include filename="$(find motoman_gp225_support)/urdf/gp225.xacro" />
+    <joint name="fix_origin_gp225" type="fixed">
       <origin xyz="0 0 0.127" rpy="0 0 0"/>
       <parent link="world"/>
       <child  link="base_link"/>
@@ -89,7 +89,7 @@
   </link>  
   <joint name="compliance_device_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="link_6_t"/>
+    <parent link="flange"/>
     <child link="compliance_device"/>
   </joint>
 
