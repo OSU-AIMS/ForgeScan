@@ -8,7 +8,7 @@ endif()
 # Define FORGE_SCAN_MESHES_DIR
 add_definitions(-DFORGE_SCAN_MESHES_DIR="/home/bturner86239/forgescan_ws/ForgeScan/share/Meshes")
 
-# find dependencies
+# Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_srvs)
@@ -34,6 +34,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
     ${msg_files}
 )
 
+# Define the executables and their dependencies
+
+# realsense_handler executable
 add_executable(realsense_handler src/realsense_handler.cpp)
 ament_target_dependencies(
     realsense_handler 
@@ -44,6 +47,7 @@ ament_target_dependencies(
     tf2_ros
 )
 
+# scan_manager executable
 add_executable(scan_manager src/scan_manager.cpp)
 ament_target_dependencies(
     scan_manager
@@ -56,7 +60,8 @@ ament_target_dependencies(
     std_srvs
 )
 
-add_executable(scan_image src/scan_image.cpp)
+# scan_image executable
+add_executable(scan_image src/scan_image.cpp src/scan_methods.cpp)
 ament_target_dependencies(
     scan_image
     rclcpp
@@ -69,6 +74,7 @@ ament_target_dependencies(
     cv_bridge
 )
 
+# Include directories for dependencies
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
@@ -80,20 +86,24 @@ include_directories(
     /home/bturner86239/forgescan_ws/src/ForgeScan/deps/HighFive/include
 )
 
+# Link directories for dependencies
 link_directories(
     ${HDF5_LIBRARY_DIRS}
     /usr/lib/x86_64-linux-gnu/hdf5/serial
 )
 
+# Install the executables
 install(TARGETS
     realsense_handler
     scan_manager
     scan_image
     DESTINATION lib/${PROJECT_NAME})
 
+# Generate typesupport
 rosidl_get_typesupport_target(cpp_typesupport_target
     ${PROJECT_NAME} rosidl_typesupport_cpp)
 
+# Link libraries for the executables
 target_link_libraries(realsense_handler 
     "${cpp_typesupport_target}"
 )

@@ -14,6 +14,14 @@
 #include "forgescan_realsense/srv/camera_pose.hpp"
 #include "forgescan_realsense/srv/intrinsics.hpp"
 
+/*
+*  A ROS 2 Node to handle the Scan Manager module of ForgeScan
+*  Creates Reconstruction Service that runs an "axis" view selection reconstruction
+*  with 7 views at 3 tilts 
+*
+*  Creates Two Clients for camera_capture service and camera_intrinsics service. 
+*
+*/
 class ScanManager : public rclcpp::Node
 {
     public:
@@ -22,27 +30,41 @@ class ScanManager : public rclcpp::Node
         {
             auto scene = forge_scan::simulation::GroundTruthScene::create();
             manager = forge_scan::Manager::create(scene->grid_properties);
-            reconstruction_service = this->create_service<std_srvs::srv::Empty>
-                ("forgescan_realsense/reconstruction", std::bind(&ScanManager::run_reconstruction, this, std::placeholders::_1, std::placeholders::_2));
+            reconstruction_service = this->create_service<std_srvs::srv::Empty>(
+                "forgescan_realsense/reconstruction", 
+                std::bind(&ScanManager::run_reconstruction, this, std::placeholders::_1, std::placeholders::_2));
         }
     private:
+        /**
+         * Main reconstruction service, runs a reconstruction through ForgeScan with a turntable view selection algorithm
+         * This algorithm has 21 total views spread over 3 tilts.
+         * 
+         * Sends Service Request to Scan_Image to retrieve sensed_points matrix
+         * 
+         * @param request: Empty Service Request
+         * 
+         * @param response: Empty Service Response
+         */
         void run_reconstruction(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
             std::shared_ptr<std_srvs::srv::Empty::Response> response)
         {
+            //Setting up ros clients/requests
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("image_client");
-            rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client = node->create_client<forgescan_realsense::srv::CameraPose>("/camera/forgescan_realsense/camera_capture");
-            rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_client = node->create_client<forgescan_realsense::srv::Intrinsics>("/camera/forgescan_realsense/camera_intrinsics");
+            rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client = 
+                node->create_client<forgescan_realsense::srv::CameraPose>("/camera/forgescan_realsense/camera_capture");
+            rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_client = 
+                node->create_client<forgescan_realsense::srv::Intrinsics>("/camera/forgescan_realsense/camera_intrinsics");
             auto pose_request = std::make_shared<forgescan_realsense::srv::CameraPose::Request>();
-
             auto intrinsics_request = std::make_shared<forgescan_realsense::srv::Intrinsics::Request>();
-            auto result = intrinsics_client->async_send_request(intrinsics_request);
 
+            auto result = intrinsics_client->async_send_request(intrinsics_request);
             if (result.valid() && rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS) 
             {
                 auto intrinsics_result = result.get();
-                intr = forge_scan::sensor::Intrinsics::create(intrinsics_result->width, intrinsics_result->height, 
-                                                            intrinsics_result->mindepth, intrinsics_result->maxdepth, 
-                                                            intrinsics_result->fovx, intrinsics_result->fovy);
+                intr = forge_scan::sensor::Intrinsics::create(
+                    intrinsics_result->width, intrinsics_result->height, 
+                    intrinsics_result->mindepth, intrinsics_result->maxdepth, 
+                    intrinsics_result->fovx, intrinsics_result->fovy);
                 RCLCPP_INFO(this->get_logger(), "Successfully retrieved intrinsics");
             } 
             else 
@@ -51,14 +73,10 @@ class ScanManager : public rclcpp::Node
                 intr = forge_scan::sensor::Intrinsics::create();
             }
 
+            //Setting up all local variables
             camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
-
             Eigen::Matrix3f K = Eigen::Matrix3f::Identity();
-
-            K = intr->getMatrix();
-
-            RCLCPP_INFO(this->get_logger(), "f_x: %f, f_y: %f, c_x: %f, c_y: %f", K(0,0), K(1,1), K(0,2), K(1,2));
-
+            forge_scan::PointMatrix sensed_points;
 
             manager->policyAdd("--set-active --type Axis --n-views 7 --n-repeat 3 --x -1.0 --y -1.0 --z -1.0 --seed 50 --uniform");
             while(!manager->policyIsComplete())
@@ -83,8 +101,6 @@ class ScanManager : public rclcpp::Node
                 //Add movement to move robot to position
 
                 auto result_future = image_client->async_send_request(pose_request);
-
-                forge_scan::PointMatrix sensed_points;
 
                 if (rclcpp::spin_until_future_complete(node, result_future) == rclcpp::FutureReturnCode::SUCCESS) 
                 {
