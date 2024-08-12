@@ -405,43 +405,43 @@ private:
 
 
 /// @brief String for the class name.
-const std::string Probability::type_name = "Probability";
+inline const std::string Probability::type_name = "Probability";
 
 /// @brief Default occupation probability threshold values.
-const float Probability::default_p_max    = 0.98f,
+inline const float Probability::default_p_max    = 0.98f,
             Probability::default_p_min    = 0.02f;
 
 /// @brief Default occupation probability values at specific positions along a ray.
-const float Probability::default_p_past   = 0.60f,
+inline const float Probability::default_p_past   = 0.60f,
             Probability::default_p_sensed = 0.80f,
             Probability::default_p_far    = 0.10f,
             Probability::default_p_init   = 0.60f,
             Probability::default_p_thresh = 0.51f;
 
 /// @brief ArgParser key for the maximum occupation probability a voxel may have.
-const std::string Probability::parse_p_max = "--p-max";
+inline const std::string Probability::parse_p_max = "--p-max";
 
 /// @brief ArgParser key for the minimum occupation probability a voxel may have.
-const std::string Probability::parse_p_min = "--p-min";
+inline const std::string Probability::parse_p_min = "--p-min";
 
 /// @brief ArgParser key for the occupation probability at d-min.
-const std::string Probability::parse_p_past = "--p-past";
+inline const std::string Probability::parse_p_past = "--p-past";
 
 /// @brief ArgParser key for the occupation probability at the sensed point.
-const std::string Probability::parse_p_sensed = "--p-sensed";
+inline const std::string Probability::parse_p_sensed = "--p-sensed";
 
 /// @brief ArgParser key for the occupation probability at d-max and above.
-const std::string Probability::parse_p_far = "--p-far";
+inline const std::string Probability::parse_p_far = "--p-far";
 
 /// @brief ArgParser key for the occupation probability to initialize a voxel to.
-const std::string Probability::parse_p_init = "--p-init";
+inline const std::string Probability::parse_p_init = "--p-init";
 
 /// @brief ArgParser key for the occupation probability above which voxels are consider occupied.
-const std::string Probability::parse_p_thresh = "--p-thresh";
+inline const std::string Probability::parse_p_thresh = "--p-thresh";
 
 /// @brief ArgParser flag for saving the voxels as the intermediate log odds instead of converting
 ///        to (and then back from) the probability.
-const std::string Probability::parse_save_as_log_odds = "--save-as-log-odds";
+inline const std::string Probability::parse_save_as_log_odds = "--save-as-log-odds";
 
 
 } // namespace data

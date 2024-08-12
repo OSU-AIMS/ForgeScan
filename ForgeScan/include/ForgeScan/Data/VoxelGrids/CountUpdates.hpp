@@ -266,7 +266,7 @@ private:
 
 
 /// @brief String for the class name.
-const std::string CountUpdates::type_name = "CountUpdates";
+inline const std::string CountUpdates::type_name = "CountUpdates";
 
 
 } // namespace data

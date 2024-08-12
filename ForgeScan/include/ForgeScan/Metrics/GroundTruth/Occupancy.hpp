@@ -286,7 +286,7 @@ private:
 
 
 /// @brief String for the class name.
-const std::string Occupancy::type_name = "Occupancy";
+inline const std::string Occupancy::type_name = "Occupancy";
 
 
 } // namespace ground_truth

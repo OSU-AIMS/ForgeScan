@@ -314,7 +314,7 @@ protected:
 /// @param out Output stream to write to.
 /// @param properties Grid Properties to write out.
 /// @return Reference to the output stream.
-std::ostream& operator<<(std::ostream &out, const Grid::Properties& properties)
+inline std::ostream& operator<<(std::ostream &out, const Grid::Properties& properties)
 {
     out << "grid properties with size of (" << properties.size.transpose() <<
            ") voxels with resolution of " << properties.resolution <<
@@ -324,28 +324,28 @@ std::ostream& operator<<(std::ostream &out, const Grid::Properties& properties)
 
 
 /// @brief ArgParser key for the number of voxel in X, Y and Z.
-const std::string Grid::Properties::parse_nx = std::string("--nx"),
+inline const std::string Grid::Properties::parse_nx = std::string("--nx"),
                   Grid::Properties::parse_ny = std::string("--ny"),
                   Grid::Properties::parse_nz = std::string("--nz");
 
 /// @brief ArgParser key for the resolution of the voxels.
-const std::string Grid::Properties::parse_resolution = std::string("--resolution");
+inline const std::string Grid::Properties::parse_resolution = std::string("--resolution");
 
 /// @brief Default resolution value.
-const float  Grid::Properties::default_resolution = 0.02;
+inline const float  Grid::Properties::default_resolution = 0.02;
 
 /// @brief Default size value (for each dimension).
-const size_t Grid::Properties::default_size       = 101;
+inline const size_t Grid::Properties::default_size       = 101;
 
 /// @brief String explaining what arguments this class accepts.
-const std::string Grid::Properties::help_string =
+inline const std::string Grid::Properties::help_string =
     "[" + Properties::parse_resolution + " <dimension of a voxel>]" +
     " [" + Properties::parse_nx + " <number voxel in X>]" +
     " [" + Properties::parse_ny + " <number voxel in Y>]" +
     " [" + Properties::parse_nz + " <number voxel in Z>]";
 
 /// @brief String explaining what this class's default parsed values are.
-const std::string Grid::Properties::default_arguments =
+inline const std::string Grid::Properties::default_arguments =
     Properties::parse_resolution + " " + std::to_string(Properties::default_resolution) +
     " " + Properties::parse_nx + " " + std::to_string(Properties::default_size) +
     " " + Properties::parse_ny + " " + std::to_string(Properties::default_size) +

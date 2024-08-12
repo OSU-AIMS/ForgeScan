@@ -91,7 +91,7 @@ inline bool hasPrefix(const std::string& str, const std::string& prefix)
 /// @param a First character.
 /// @param b Second character.
 /// @return True if they are the same character in either lower or upper case.
-bool ichar_equals(const char& a, const char& b)
+inline bool ichar_equals(const char& a, const char& b)
 {
     return std::tolower(static_cast<unsigned char>(a)) == std::tolower(static_cast<unsigned char>(b));
 }
@@ -101,7 +101,7 @@ bool ichar_equals(const char& a, const char& b)
 /// @param a First string.
 /// @param b Second string.
 /// @return True if the strings have the same contents, regardless of the capitalization of the contents.
-bool iequals(const std::string& a, const std::string& b)
+inline bool iequals(const std::string& a, const std::string& b)
 {
     return std::equal(a.begin(), a.end(), b.begin(), b.end(), ichar_equals);
 }

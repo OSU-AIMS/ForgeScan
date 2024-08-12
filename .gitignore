@@ -1,19 +1,34 @@
 ## ------------------------ ##
 ## Project Specific Folders ##
 ## ------------------------ ##
-bin/*
-lib/*
-build/*
-install/*
-share/*
-.idea/*
-.vscode/*
-log/*
-scripts/plots/*
-.vscode/*
-.devcontainer/*
-.pylintrc
 
+.vscode/*
+
+## ----------------- ## 
+## ForgeScan Folders ##
+## ----------------- ##
+
+ForgeScan/bin
+ForgeScan/install/*
+ForgeScan/share/*
+ForgeScan/.vscode/*
+ForgeScan/log/*
+ForgeScan/scripts/plots/*
+ForgeScan/.vscode/*
+ForgeScan/.devcontainer/*
+ForgeScan/.pylintrc
+**/CMakeFiles
+
+## --------------- ##
+## ForgeScan Files ##
+## --------------- ##
+
+ForgeScan/CMakeCache.txt
+ForgeScan/CMakeDoxyfile.in
+ForgeScan/Makefile
+**/Makefile
+
+*.cmake
 *.h5
 *.xdmf
 

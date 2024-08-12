@@ -157,10 +157,10 @@ protected:
 
 
 /// @brief String for the class name.
-const std::string Metric::type_name = "Metric";
+inline const std::string Metric::type_name = "Metric";
 
 /// @brief ArgParser key for the type of Metric to add.
-const std::string Metric::parse_type = "--type";
+inline const std::string Metric::parse_type = "--type";
 
 
 } // namespace metrics

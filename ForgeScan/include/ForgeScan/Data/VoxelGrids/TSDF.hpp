@@ -423,13 +423,13 @@ private:
 
 
 /// @brief String for the class name.
-const std::string TSDF::type_name = "TSDF";
+inline const std::string TSDF::type_name = "TSDF";
 
 /// @brief ArgParser flag for using an average method.
-const std::string TSDF::parse_average = "--average";
+inline const std::string TSDF::parse_average = "--average";
 
 /// @brief ArgParser flag for using a minimum magnitude method.
-const std::string TSDF::parse_minimum = "--minimum";
+inline const std::string TSDF::parse_minimum = "--minimum";
 
 
 

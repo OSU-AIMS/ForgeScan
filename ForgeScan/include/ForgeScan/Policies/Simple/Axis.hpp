@@ -413,54 +413,54 @@ protected:
 
 
 /// @brief String for the class name.
-const std::string Axis::type_name = "Axis";
+inline const std::string Axis::type_name = "Axis";
 
 /// @brief Default number of repetitions about the sampling axis.
-const int Axis::default_n_repeat = 1;
+inline const int Axis::default_n_repeat = 1;
 
 /// @brief Default value for each unit direction of a user-specified axis.
-const float Axis::default_axis_val = 0.0f;
+inline const float Axis::default_axis_val = 0.0f;
 
 /// @brief Default distance from the sampling axis to generate views at.
-const float Axis::default_r = 2.5;
+inline const float Axis::default_r = 2.5;
 
 /// @brief Default minimum and maximum heights along sampling axis to generate views at.
-const float Axis::default_h = 0.0f, Axis::default_h_max = 2.5f;
+inline const float Axis::default_h = 0.0f, Axis::default_h_max = 2.5f;
 
 /// @brief ArgParser key for the distance from the sampling axis to generate views at.
-const std::string Axis::parse_r = "--r";
+inline const std::string Axis::parse_r = "--r";
 
 /// @brief ArgParser key for the minimum and maximum heights along sampling axis to generate views at.
-const std::string Axis::parse_h = "--h", Axis::parse_h_max = "--h-max";
+inline const std::string Axis::parse_h = "--h", Axis::parse_h_max = "--h-max";
 
 /// @brief ArgParser flag to always point the sensor at the origin of the Grid. If not provided
 ///        the sensor is pointed at the axis at the same height as the sensor.
-const std::string Axis::parse_target_center = "--target-center";
+inline const std::string Axis::parse_target_center = "--target-center";
 
 /// @brief ArgParser flag to sample in uniform rotations around the axis.
-const std::string Axis::parse_uniform = "--uniform";
+inline const std::string Axis::parse_uniform = "--uniform";
 
 /// @brief ArgParser key for the number of rotations to make about the axis. Rotations are
 ///        linearly spaced between `h` and `h_max`
-const std::string Axis::parse_n_repeat = "--n-repeat";
+inline const std::string Axis::parse_n_repeat = "--n-repeat";
 
 /// @brief ArgParser flag for how many views about and random axis before changing the random axis.
-const std::string Axis::parse_change_random = "--change-random";
+inline const std::string Axis::parse_change_random = "--change-random";
 
 /// @brief ArgParser flags to use the specified cartesian axis (in the Grid's frame) as the rotation axis.
-const std::string Axis::parse_x_axis = "--x-axis",
+inline const std::string Axis::parse_x_axis = "--x-axis",
                   Axis::parse_y_axis = "--y-axis",
                   Axis::parse_z_axis = "--z-axis",
                   Axis::parse_random_axis = "--random-axis";
 
 /// @brief ArgPArser keys for a user-defined rotation axis (in the Grid's frame).
-const std::string Axis::parse_x = "--x",
+inline const std::string Axis::parse_x = "--x",
                   Axis::parse_y = "--y",
                   Axis::parse_z = "--z";
 
 
 /// @brief String explaining the non axis-related arguments this class accepts when using a cartesian axis.
-const std::string Axis::help_string_basic =
+inline const std::string Axis::help_string_basic =
     "["  + Policy::parse_n_views + " <views per rotation>]" +
     " [" + Axis::parse_n_repeat  + " <repetitions>]" +
     " [" + Axis::parse_r         + " <radius>]" +
@@ -470,7 +470,7 @@ const std::string Axis::help_string_basic =
     " [" + Axis::parse_uniform + "] [" + Axis::parse_target_center + "] [" + Axis::parse_change_random + "]";
 
 /// @brief String explaining what arguments this class accepts when using a cartesian axis.
-const std::string Axis::help_string_1 =
+inline const std::string Axis::help_string_1 =
     "<" + Axis::parse_x_axis + " | " +
           Axis::parse_y_axis + " | " +
           Axis::parse_z_axis + " | " +
@@ -478,13 +478,13 @@ const std::string Axis::help_string_1 =
 
 
 /// @brief String explaining what arguments this class accepts when using a user-specified axis.
-const std::string Axis::help_string_2 =
+inline const std::string Axis::help_string_2 =
     "[" + Axis::parse_x      + " <axis X component>]" +
     " [" + Axis::parse_y      + " <axis Y component>]" +
     " [" + Axis::parse_z      + " <axis Z component>]";
 
 /// @brief String explaining what this class's default parsed values are.
-const std::string Axis::default_arguments =
+inline const std::string Axis::default_arguments =
     Policy::parse_type + " Axis " + Axis::parse_z_axis + " " + Policy::parse_n_views + " " +
     std::to_string(Policy::default_n_views) + " " + Axis::parse_r + " " + std::to_string(Axis::default_r);
 

@@ -15,7 +15,7 @@ namespace utilities {
 
 
 /// @brief Pseudo-random generation of seed values for other generators.
-std::random_device RANDOM_DEVICE;
+inline std::random_device RANDOM_DEVICE;
 
 
 template<

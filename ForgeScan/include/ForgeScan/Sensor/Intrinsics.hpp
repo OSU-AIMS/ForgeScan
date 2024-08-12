@@ -289,7 +289,7 @@ private:
 /// @param out Output stream to write to.
 /// @param intr Intrinsics to write out.
 /// @return Reference to the output stream.
-std::ostream& operator<< (std::ostream &out, const Intrinsics& intr)
+inline std::ostream& operator<< (std::ostream &out, const Intrinsics& intr)
 {
     out << "(" << intr.width << ", "<< intr.height << ") pixels "
         << "min_d=" << intr.min_d << " max_d=" << intr.max_d << " "
@@ -300,50 +300,50 @@ std::ostream& operator<< (std::ostream &out, const Intrinsics& intr)
 
 
 /// @brief Default width and height for pixels on a sensor. Uses RealSense d455 properties.
-const size_t Intrinsics::default_width = 1280,
+inline const size_t Intrinsics::default_width = 1280,
              Intrinsics::default_height = 720;
 
 /// @brief Default minimum and maximum depth for a sensor.
-const float Intrinsics::default_min_d = 0.0f,
+inline const float Intrinsics::default_min_d = 0.0f,
             Intrinsics::default_max_d = 10.0f;
 
 /// @brief Default minimum and maximum depth for a RealSense d455.
-const float Intrinsics::realsense_min_d = 0.6f,
+inline const float Intrinsics::realsense_min_d = 0.6f,
             Intrinsics::realsense_max_d = 6.0f;
 
 /// @brief Default field of view properties for a sensor. Uses RealSense d455 properties.
-const float Intrinsics::default_fov = 80.0f,
+inline const float Intrinsics::default_fov = 80.0f,
             Intrinsics::default_fov_x = 87.0f,
             Intrinsics::default_fov_y = 58.0f;
 
 /// @brief ArgParser key for number of pixels in the X (width) and Y (height) directions.
-const std::string Intrinsics::parse_width = "--width",
+inline const std::string Intrinsics::parse_width = "--width",
                   Intrinsics::parse_height = "--height";
 
 /// @brief ArgParser key for minimum and maximum depth.
-const std::string Intrinsics::parse_min_d = "--min-d",
+inline const std::string Intrinsics::parse_min_d = "--min-d",
                   Intrinsics::parse_max_d = "--max-d";
 
 /// @brief ArgParser key for field of view properties.
-const std::string Intrinsics::parse_fov = "--fov",
+inline const std::string Intrinsics::parse_fov = "--fov",
                   Intrinsics::parse_fov_x = "--fov-x",
                   Intrinsics::parse_fov_y = "--fov-y";
 
 /// @brief ArgParser flag to use Intel RealSense d455 properties and ArgParser key for how
 ///        much to scale the number of pixels used.
-const std::string Intrinsics::parse_d455 = "--d455";
+inline const std::string Intrinsics::parse_d455 = "--d455";
 
 /// @brief String explaining what arguments this class accepts for the RealSense option.
-const std::string Intrinsics::help_string_1 =
+inline const std::string Intrinsics::help_string_1 =
     Intrinsics::parse_d455 + " [pixel resolution scale value]";
 
 /// @brief String explaining what this class's default parsed values for the RealSense option.
-const std::string Intrinsics::default_arguments_1 =
+inline const std::string Intrinsics::default_arguments_1 =
     Intrinsics::parse_d455 + " " + std::to_string(1.0f);
 
 
 /// @brief String explaining what arguments this class accepts for the single FOV option.
-const std::string Intrinsics::help_string_2 =
+inline const std::string Intrinsics::help_string_2 =
     "["  + Intrinsics::parse_width + " <pixels in x>]"
     " [" + Intrinsics::parse_height + " <pixels in y>]"
     " [" + Intrinsics::parse_min_d + " <depth min>]"
@@ -351,7 +351,7 @@ const std::string Intrinsics::help_string_2 =
     " [" + Intrinsics::parse_fov + " <horizontal FOV degrees>]";
 
 /// @brief String explaining what this class's default parsed values for the single FOV option.
-const std::string Intrinsics::default_arguments_2 =
+inline const std::string Intrinsics::default_arguments_2 =
     Intrinsics::parse_width + " " + std::to_string(Intrinsics::default_width) +
     Intrinsics::parse_height + " " + std::to_string(Intrinsics::default_height) +
     Intrinsics::parse_min_d + " " + std::to_string(Intrinsics::default_min_d) +
@@ -359,7 +359,7 @@ const std::string Intrinsics::default_arguments_2 =
     Intrinsics::parse_fov + " " + std::to_string(Intrinsics::default_fov);
 
 /// @brief String explaining what arguments this class accepts for the independent FOV option.
-const std::string Intrinsics::help_string_3 =
+inline const std::string Intrinsics::help_string_3 =
     "["  + Intrinsics::parse_width + " <pixels in x>]" +
     " [" + Intrinsics::parse_height + " <pixels in y>]" +
     " [" + Intrinsics::parse_min_d + " <depth min>]" +
@@ -368,7 +368,7 @@ const std::string Intrinsics::help_string_3 =
     " [" + Intrinsics::parse_fov_y + " <Y FOV degrees>]";
 
 /// @brief String explaining what this class's default parsed values for the independent FOV option.
-const std::string Intrinsics::default_arguments_3 =
+inline const std::string Intrinsics::default_arguments_3 =
     Intrinsics::parse_width + " " + std::to_string(Intrinsics::default_width) +
     Intrinsics::parse_height + " " + std::to_string(Intrinsics::default_height) +
     Intrinsics::parse_min_d + " " + std::to_string(Intrinsics::default_min_d) +

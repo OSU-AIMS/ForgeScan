@@ -313,45 +313,45 @@ protected:
 
 
 /// @brief Default translation (in each direction axis).
-const float Entity::default_translation = 0.0;
+inline const float Entity::default_translation = 0.0;
 
 /// @brief ArgParser key for the translation in X, Y and Z.
-const std::string Entity::parse_x  = std::string("--x"),
+inline const std::string Entity::parse_x  = std::string("--x"),
                   Entity::parse_y  = std::string("--y"),
                   Entity::parse_z  = std::string("--z");
 
 /// @brief Default rotation (about each axis).
-const float Entity::default_rotation = 0.0;
+inline const float Entity::default_rotation = 0.0;
 
 /// @brief ArgParser key for the rotation around X, Y and Z.
-const std::string Entity::parse_rx = std::string("--rx"),
+inline const std::string Entity::parse_rx = std::string("--rx"),
                   Entity::parse_ry = std::string("--ry"),
                   Entity::parse_rz = std::string("--rz");
 
 /// @brief ArgParser key for a flag that the rotation values are in degrees.
-const std::string Entity::parse_rotation_degrees = std::string("--degrees");
+inline const std::string Entity::parse_rotation_degrees = std::string("--degrees");
 
 /// @brief String explaining what arguments this class accepts for setting translation.
-const std::string Entity::translation_help_string =
+inline const std::string Entity::translation_help_string =
     "[" + Entity::parse_x + " <translation in X>]" +
     " [" + Entity::parse_y + " <translation in Y>]" +
     " [" + Entity::parse_z + " <translation in Z>]";
 
 /// @brief String explaining what this class's default parsed values are for setting translation.
-const std::string Entity::translation_default_arguments =
+inline const std::string Entity::translation_default_arguments =
     Entity::parse_x + " " + std::to_string(Entity::default_translation) +
     " " + Entity::parse_y + " " + std::to_string(Entity::default_translation) +
     " " + Entity::parse_z + " " + std::to_string(Entity::default_translation);
 
 /// @brief String explaining what arguments this class accepts for setting rotation.
-const std::string Entity::rotation_help_string =
+inline const std::string Entity::rotation_help_string =
     "[" + Entity::parse_x + " <rotation in X>]" +
     " [" + Entity::parse_y + " <rotation in Y>]" +
     " [" + Entity::parse_z + " <rotation in Z>]" +
     " [" + Entity::parse_rotation_degrees + "]";
 
 /// @brief String explaining what this class's default parsed values are for setting rotation.
-const std::string Entity::rotation_default_arguments =
+inline const std::string Entity::rotation_default_arguments =
     Entity::parse_rx + " " + std::to_string(Entity::default_rotation) +
     " " + Entity::parse_ry + " " + std::to_string(Entity::default_rotation) +
     " " + Entity::parse_rz + " " + std::to_string(Entity::default_rotation);

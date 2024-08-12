@@ -208,7 +208,7 @@ protected:
 
 
 /// @brief String for the class name.
-const std::string OccupancyConfusion::type_name = "OccupancyConfusion";
+inline const std::string OccupancyConfusion::type_name = "OccupancyConfusion";
 
 
 } // namespace metrics

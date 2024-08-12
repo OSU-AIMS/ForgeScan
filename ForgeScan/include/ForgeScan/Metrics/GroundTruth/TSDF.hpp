@@ -189,7 +189,7 @@ private:
 
 
 /// @brief String for the class name.
-const std::string TSDF::type_name = "TSDF";
+inline const std::string TSDF::type_name = "TSDF";
 
 
 } // namespace ground_truth

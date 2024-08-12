@@ -427,7 +427,7 @@ protected:
 /// @param out Output stream to write to.
 /// @param scene Scene to write out.
 /// @return Reference to the output stream.
-std::ostream& operator<<(std::ostream &out, const Scene& scene)
+inline std::ostream& operator<<(std::ostream &out, const Scene& scene)
 {
     if (!scene.mesh_map.empty())
     {

@@ -71,7 +71,7 @@ struct Camera : public Entity
     /// @note The ouput point is implicitly relative to the optical frame of the camera
     ///       that generated the depth image.
     /// @throws std::invalid_argument If the pixel was out of bounds.
-    static void getPoint(const std::shared_ptr<Intrinsics>& intr,
+    static void getPoint(const std::shared_ptr<const Intrinsics>& intr,
                          const DepthImage& image, const Eigen::Index& row, const Eigen::Index col,
                          Point& out)
     {
@@ -88,16 +88,16 @@ struct Camera : public Entity
     /// @param [out] dest Matrix to store the depth image's Points in.
     /// @note The ouput points are implicitly relative to the optical frame of the camera
     ///       that generated the depth image.
-    static void getPointsFromImageAndIntrinsics(const std::shared_ptr<Intrinsics>& intr,
+    static void getPointsFromImageAndIntrinsics(const std::shared_ptr<const Intrinsics>& intr,
                                                 const DepthImage& image,
                                                 PointMatrix& dest)
     {
         dest.setConstant(3, intr->size(), 0);
         size_t n = 0;
         Point xyz;
-        for (Eigen::Index row = 0; row < dest.rows(); ++row)
+        for (Eigen::Index row = 0; (size_t)row < intr->height; row++)
         {
-            for (Eigen::Index col = 0; col < dest.cols(); ++col)
+            for (Eigen::Index col = 0; (size_t)col < intr->width; col++)
             {
                 getPoint(intr, image, row, col, xyz);
                 dest.col(n) << xyz;

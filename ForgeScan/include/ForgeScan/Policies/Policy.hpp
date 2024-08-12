@@ -263,7 +263,7 @@ protected:
 /// @param out Output stream to write to.
 /// @param policy The Policy to write to the output stream.
 /// @return Reference to the output stream.
-std::ostream& operator<<(std::ostream &out, const Policy& policy)
+inline std::ostream& operator<<(std::ostream &out, const Policy& policy)
 {
     policy.print(out);
     return out;
@@ -271,31 +271,31 @@ std::ostream& operator<<(std::ostream &out, const Policy& policy)
 
 
 /// @brief String for the class name.
-const std::string Policy::type_name = "Policy";
+inline const std::string Policy::type_name = "Policy";
 
 /// @brief Default number of views for a Policy to collect.
-const int Policy::default_n_views = 10;
+inline const int Policy::default_n_views = 10;
 
 /// @brief Default RNG seed for a Policy to use.
-const float Policy::default_seed = -1;
+inline const float Policy::default_seed = -1;
 
 /// @brief ArgParser key for the flag to set a new Policy as the active one.
-const std::string Policy::parse_set_active = "--set-active";
+inline const std::string Policy::parse_set_active = "--set-active";
 
 /// @brief ArgParser key for the type of Policy to add.
-const std::string Policy::parse_type = "--type";
+inline const std::string Policy::parse_type = "--type";
 
 /// @brief ArgParser key for number of views a Policy should collect. Policies may generate more
 ///        views than this but some require an expected number up-front or use this to judge if
 ///        they have reached completion.
-const std::string Policy::parse_n_views = "--n-views";
+inline const std::string Policy::parse_n_views = "--n-views";
 
 /// @brief ArgParser key for the seed to use to initialize the Policy's RNG.
 ///        Negative values indicate the program should use a random RNG seed.
-const std::string Policy::parse_seed = "--seed";
+inline const std::string Policy::parse_seed = "--seed";
 
 /// @brief String explaining what arguments a generic Policy class accepts.
-const std::string Policy::help_string =
+inline const std::string Policy::help_string =
     Policy::parse_type + " <policy type> [policy-specific options]";
 
 

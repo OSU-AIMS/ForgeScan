@@ -342,7 +342,7 @@ private:
 
 
 /// @brief String for the class name.
-const std::string CountViews::type_name = "CountViews";
+inline const std::string CountViews::type_name = "CountViews";
 
 
 } // namespace data

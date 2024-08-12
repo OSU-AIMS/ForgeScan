@@ -243,26 +243,26 @@ protected:
 
 
 /// @brief String for the class name.
-const std::string Sphere::type_name = "Sphere";
+inline const std::string Sphere::type_name = "Sphere";
 
 /// @brief Default radius (and maximum radius) for view to be sampled from.
-const float Sphere::default_r = 2.5, Sphere::default_r_max = 2.5;
+inline const float Sphere::default_r = 2.5, Sphere::default_r_max = 2.5;
 
 /// @brief ArgParser flag to use a uniform sampling method.
-const std::string Sphere::parse_uniform = "--uniform";
+inline const std::string Sphere::parse_uniform = "--uniform";
 
 /// @brief ArgParser flag to select the uniform views in an unordered manner.
-const std::string Sphere::parse_unordered = "--unordered";
+inline const std::string Sphere::parse_unordered = "--unordered";
 
 /// @brief ArgParser key for the sensor distance from the grid center.
-const std::string Sphere::parse_r = "--r";
+inline const std::string Sphere::parse_r = "--r";
 
 /// @brief ArgParser key for the maximum distance between the sensor and grid center.
 ///        Used in the random sampling mode.
-const std::string Sphere::parse_r_max = "--r-max";
+inline const std::string Sphere::parse_r_max = "--r-max";
 
 /// @brief String explaining what arguments this class accepts.
-const std::string Sphere::help_string =
+inline const std::string Sphere::help_string =
     "["  + Policy::parse_n_views + " <number of views>]"
     " [" + Sphere::parse_r       + " <radius>]" +
     " [" + Sphere::parse_r_max   + " <maximum radius>]" +
@@ -270,7 +270,7 @@ const std::string Sphere::help_string =
     " [" + Sphere::parse_uniform + "] [" + Sphere::parse_unordered + "]";
 
 /// @brief String explaining what this class's default parsed values are.
-const std::string Sphere::default_arguments =
+inline const std::string Sphere::default_arguments =
     Policy::parse_type + " Sphere " + Sphere::parse_r + " " +
     std::to_string(Sphere::default_r);
 

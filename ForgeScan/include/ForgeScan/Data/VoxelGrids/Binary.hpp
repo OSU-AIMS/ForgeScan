@@ -363,10 +363,10 @@ private:
 
 
 /// @brief String for the class name.
-const std::string Binary::type_name = "Binary";
+inline const std::string Binary::type_name = "Binary";
 
 /// @brief Parser flag to skip calculating the occplanes.
-const std::string Binary::parse_no_occplane = "--no-occplane";
+inline const std::string Binary::parse_no_occplane = "--no-occplane";
 
 
 } // namespace data

@@ -270,7 +270,7 @@ private:
 };
 
 
-const std::string ArgParser::empty_string = std::string("");
+inline const std::string ArgParser::empty_string = std::string("");
 
 
 /// @brief Reads from the input stream.
@@ -278,7 +278,7 @@ const std::string ArgParser::empty_string = std::string("");
 /// @param parser ArgParser to read to.
 /// @return Reference to the input stream.
 /// @warning The parser reads a maximum 300 characters from a line in the stream.
-std::istream& operator>> (std::istream& stream, ArgParser& parser)
+inline std::istream& operator>> (std::istream& stream, ArgParser& parser)
 {
     static const size_t string_buffer_size = 300;
     std::string s(string_buffer_size, ' ');
@@ -304,7 +304,7 @@ std::istream& operator>> (std::istream& stream, ArgParser& parser)
 /// @param out Output stream to write to.
 /// @param parser ArgParser to write out.
 /// @return Reference to the output stream.
-std::ostream& operator<< (std::ostream &out, const ArgParser& parser)
+inline std::ostream& operator<< (std::ostream &out, const ArgParser& parser)
 {
     out << "[";
     auto it = parser.tokens.begin();

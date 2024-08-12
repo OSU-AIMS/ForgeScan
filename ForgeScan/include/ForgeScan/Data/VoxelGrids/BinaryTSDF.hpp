@@ -232,7 +232,7 @@ private:
 
 
 /// @brief String for the class name.
-const std::string BinaryTSDF::type_name = "BinaryTSDF";
+inline const std::string BinaryTSDF::type_name = "BinaryTSDF";
 
 
 

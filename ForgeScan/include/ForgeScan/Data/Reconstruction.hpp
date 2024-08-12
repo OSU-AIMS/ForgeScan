@@ -368,7 +368,7 @@ private:
 
 
 /// @brief ArgParser key for the name of the Data Channel to be add.
-const std::string Reconstruction::parse_name = "--name";
+inline const std::string Reconstruction::parse_name = "--name";
 
 
 } // namespace data
