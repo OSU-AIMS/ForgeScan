@@ -48,7 +48,7 @@ ament_target_dependencies(
 )
 
 # scan_manager executable
-add_executable(scan_manager src/scan_manager.cpp)
+add_executable(scan_manager src/scan_manager.cpp src/scan_methods.cpp)
 ament_target_dependencies(
     scan_manager
     rclcpp 
@@ -58,6 +58,7 @@ ament_target_dependencies(
     tf2_ros
     Open3D
     std_srvs
+    cv_bridge
 )
 
 # scan_image executable
@@ -80,6 +81,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
     ${HDF5_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
+    ${cv_bridge_INCLUDE_DIRS}
     /usr/include/hdf5/serial
     /usr/include/eigen3
     /home/bturner86239/forgescan_ws/src/ForgeScan/include

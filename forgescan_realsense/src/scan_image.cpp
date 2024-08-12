@@ -51,8 +51,7 @@ class ScanImage : public rclcpp::Node
         void take_picture(const std::shared_ptr<forgescan_realsense::srv::CameraPose::Request> request,
                 std::shared_ptr<forgescan_realsense::srv::CameraPose::Response> response)
         {
-            ScanMethods scan_helper;
-            camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
+            ScanMethods scan_methods;
             Eigen::Matrix4f transformation_matrix;
             forge_scan::PointMatrix sensed_points;
 
@@ -69,13 +68,15 @@ class ScanImage : public rclcpp::Node
                     intrinsics_result->width, intrinsics_result->height, 
                     intrinsics_result->mindepth, intrinsics_result->maxdepth, 
                     intrinsics_result->fovx, intrinsics_result->fovy);
-                RCLCPP_INFO(this->get_logger(), "Successfully retrieved intrinsics");
             } 
             else 
             {
                 RCLCPP_ERROR(this->get_logger(), "Failed to retrieve intrinsics values, using defaults");
                 intr = forge_scan::sensor::Intrinsics::create();
             }
+
+            camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
+
             geometry_msgs::msg::Pose pose = request->pose;
             Eigen::Quaternionf quat(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z);
             transformation_matrix.setIdentity();
@@ -84,43 +85,7 @@ class ScanImage : public rclcpp::Node
             Eigen::Isometry3f camera_pose = Eigen::Isometry3f(transformation_matrix);
             camera->setExtr(camera_pose);
 
-            auto eigen_image = scan_helper.messageToEigen(camera_image); //below commented out code is found in scan_methods.cpp, will remove during testing tomorrow
-
-            // cv_bridge::CvImagePtr cv_ptr;
-            // try {
-            //     cv_ptr = cv_bridge::toCvCopy(camera_image, sensor_msgs::image_encodings::TYPE_16UC1);
-            // } catch (cv_bridge::Exception& e) {
-            //     RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
-            //     return;
-            // }
-
-            // cv::Mat image = cv_ptr->image;
-
-            // cv::Mat depth_image_meters;
-
-            // image.convertTo(depth_image_meters, CV_32F, 10.0);
-
-            // for (int i = 0; i < depth_image_meters.rows; ++i) 
-            // {
-            //     for(int j = 0; j < depth_image_meters.cols; j++)
-            //     {
-            //         if(depth_image_meters.at<float>(i,j)<=1000)
-            //         {
-            //             depth_image_meters.at<float>(i,j) = 100000.0;
-            //         }
-            //         depth_image_meters.at<float>(i,j) = depth_image_meters.at<float>(i,j)/10000.0;
-            //         RCLCPP_INFO(this->get_logger(), "Depth value at (%d, %d): %f meters", i, j, depth_image_meters.at<float>(i, j));
-            //     }
-            // }
-
-            // Eigen::MatrixXf eigen_image(depth_image_meters.rows, depth_image_meters.cols);
-            // for(int i = 0; i < depth_image_meters.rows; ++i)
-            // {
-            //     for(int j = 0; j < depth_image_meters.cols; ++j)
-            //     {
-            //         eigen_image(i, j) = depth_image_meters.at<float>(i,j);
-            //     }
-            // }
+            Eigen::MatrixXf eigen_image = scan_methods.messageToEigen(camera_image);
 
             camera->getPointsFromImageAndIntrinsics(camera->getIntr(), eigen_image, sensed_points);
 
@@ -132,6 +97,8 @@ class ScanImage : public rclcpp::Node
                 response->eigenmatrix[i].y = sensed_points.col(i).y();
                 response->eigenmatrix[i].z = sensed_points.col(i).z();
             }
+
+            RCLCPP_INFO(this->get_logger(), "Successfully took picture #: ");
         }
 
         /**

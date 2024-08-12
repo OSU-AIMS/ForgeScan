@@ -14,6 +14,8 @@
 #include "forgescan_realsense/srv/camera_pose.hpp"
 #include "forgescan_realsense/srv/intrinsics.hpp"
 
+#include "scan_methods.hpp"
+
 /*
 *  A ROS 2 Node to handle the Scan Manager module of ForgeScan
 *  Creates Reconstruction Service that runs an "axis" view selection reconstruction
@@ -48,6 +50,18 @@ class ScanManager : public rclcpp::Node
         void run_reconstruction(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
             std::shared_ptr<std_srvs::srv::Empty::Response> response)
         {
+            std::filesystem::path save_fpath  = "/home/bturner86239/forgescan_ws/src/reconstructions";
+
+            manager->reconstructionAddChannel("--name tsdf           --type TSDF           --dtype double");
+            manager->reconstructionAddChannel("--name avg_tsdf   --type TSDF   --average   --dtype float");
+            manager->reconstructionAddChannel("--name min_tsdf   --type TSDF   --minimum   --dtype float");
+            manager->reconstructionAddChannel("--name update         --type CountUpdates    --dtype uint");
+            manager->reconstructionAddChannel("--name binary         --type Binary         --dtype uint");
+            manager->reconstructionAddChannel("--name binary_tsdf    --type BinaryTSDF     --dtype uint");
+            manager->reconstructionAddChannel("--name probability    --type Probability    --dtype float");
+            manager->reconstructionAddChannel("--name views          --type CountViews     --dtype size_t");
+
+            ScanMethods scan_methods;
             //Setting up ros clients/requests
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("image_client");
             rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client = 
@@ -73,56 +87,10 @@ class ScanManager : public rclcpp::Node
                 intr = forge_scan::sensor::Intrinsics::create();
             }
 
-            //Setting up all local variables
-            camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
-            Eigen::Matrix3f K = Eigen::Matrix3f::Identity();
-            forge_scan::PointMatrix sensed_points;
+            auto manager_node = std::make_shared<ScanManager>();
+            scan_methods.runTurnTableReconstruction(node, intr, manager, image_client);
 
-            manager->policyAdd("--set-active --type Axis --n-views 7 --n-repeat 3 --x -1.0 --y -1.0 --z -1.0 --seed 50 --uniform");
-            while(!manager->policyIsComplete())
-            {
-                camera_pose = manager->policyGetView();
-
-                Eigen::Matrix4f matrix_camera_pose = camera_pose.matrix();
-
-                Eigen::Quaternionf quat(matrix_camera_pose.topLeftCorner<3,3>());
-                
-                auto camera_pose = geometry_msgs::msg::Pose();
-                camera_pose.position.x = matrix_camera_pose(0,3);
-                camera_pose.position.y = matrix_camera_pose(1,3);
-                camera_pose.position.z = matrix_camera_pose(2,3);
-                camera_pose.orientation.x = quat.x();
-                camera_pose.orientation.y = quat.y();
-                camera_pose.orientation.z = quat.z();
-                camera_pose.orientation.w = quat.w();
-
-                pose_request->pose = camera_pose;
-
-                //Add movement to move robot to position
-
-                auto result_future = image_client->async_send_request(pose_request);
-
-                if (rclcpp::spin_until_future_complete(node, result_future) == rclcpp::FutureReturnCode::SUCCESS) 
-                {
-                    auto result = result_future.get();
-                    int len = result->length;
-                    sensed_points.resize(3, len);
-                    for(int i = 0; i<len; i++)
-                    {
-                        sensed_points(0, i) = result->eigenmatrix[i].x;
-                        sensed_points(1, i) = result->eigenmatrix[i].y;
-                        sensed_points(2, i) = result->eigenmatrix[i].z;
-                    }
-                } 
-                else 
-                {
-                    RCLCPP_ERROR(node->get_logger(), "Failed to capture_image");
-                }
-                manager->reconstructionUpdate(sensed_points, camera->getExtr());
-
-                manager->policyAcceptView();
-            }
-            RCLCPP_INFO(this->get_logger(), "Successfully finished Reconstruction");
+            auto updated_fpath = manager->save(save_fpath);
         }
 
     std::shared_ptr<forge_scan::sensor::Intrinsics> intr;
