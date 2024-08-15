@@ -32,6 +32,14 @@ class ScanManager : public rclcpp::Node
         {
             auto scene = forge_scan::simulation::GroundTruthScene::create();
             manager = forge_scan::Manager::create(scene->grid_properties);
+            manager->reconstructionAddChannel("--name tsdf           --type TSDF           --dtype double");
+            manager->reconstructionAddChannel("--name avg_tsdf   --type TSDF   --average   --dtype float");
+            manager->reconstructionAddChannel("--name min_tsdf   --type TSDF   --minimum   --dtype float");
+            manager->reconstructionAddChannel("--name update         --type CountUpdates    --dtype uint");
+            manager->reconstructionAddChannel("--name binary         --type Binary         --dtype uint");
+            manager->reconstructionAddChannel("--name binary_tsdf    --type BinaryTSDF     --dtype uint");
+            manager->reconstructionAddChannel("--name probability    --type Probability    --dtype float");
+            manager->reconstructionAddChannel("--name views          --type CountViews     --dtype size_t");
             reconstruction_service = this->create_service<std_srvs::srv::Empty>(
                 "forgescan_realsense/reconstruction", 
                 std::bind(&ScanManager::run_reconstruction, this, std::placeholders::_1, std::placeholders::_2));
@@ -50,17 +58,7 @@ class ScanManager : public rclcpp::Node
         void run_reconstruction(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
             std::shared_ptr<std_srvs::srv::Empty::Response> response)
         {
-            std::filesystem::path save_fpath  = "/home/bturner86239/forgescan_ws/src/reconstructions";
-
-            manager->reconstructionAddChannel("--name tsdf           --type TSDF           --dtype double");
-            manager->reconstructionAddChannel("--name avg_tsdf   --type TSDF   --average   --dtype float");
-            manager->reconstructionAddChannel("--name min_tsdf   --type TSDF   --minimum   --dtype float");
-            manager->reconstructionAddChannel("--name update         --type CountUpdates    --dtype uint");
-            manager->reconstructionAddChannel("--name binary         --type Binary         --dtype uint");
-            manager->reconstructionAddChannel("--name binary_tsdf    --type BinaryTSDF     --dtype uint");
-            manager->reconstructionAddChannel("--name probability    --type Probability    --dtype float");
-            manager->reconstructionAddChannel("--name views          --type CountViews     --dtype size_t");
-
+            std::filesystem::path save_fpath  = std::filesystem::current_path() / "src/forgescan_realsense/reconstructions/reconstruction";
             ScanMethods scan_methods;
             //Setting up ros clients/requests
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("image_client");

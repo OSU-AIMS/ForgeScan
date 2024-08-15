@@ -6,7 +6,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Define FORGE_SCAN_MESHES_DIR
-add_definitions(-DFORGE_SCAN_MESHES_DIR="/home/bturner86239/forgescan_ws/ForgeScan/share/Meshes")
+add_definitions(-DFORGE_SCAN_MESHES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../ForgeScan/share/Meshes")
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
@@ -84,8 +84,8 @@ include_directories(
     ${cv_bridge_INCLUDE_DIRS}
     /usr/include/hdf5/serial
     /usr/include/eigen3
-    /home/bturner86239/forgescan_ws/src/ForgeScan/include
-    /home/bturner86239/forgescan_ws/src/ForgeScan/deps/HighFive/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../ForgeScan/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../ForgeScan/deps/HighFive/include
 )
 
 # Link directories for dependencies

@@ -98,7 +98,8 @@ class ScanImage : public rclcpp::Node
                 response->eigenmatrix[i].z = sensed_points.col(i).z();
             }
 
-            RCLCPP_INFO(this->get_logger(), "Successfully took picture #: ");
+            RCLCPP_INFO(this->get_logger(), "Successfully took picture #%ld", request->picture_number);
+            //Add topic for current picture #?
         }
 
         /**

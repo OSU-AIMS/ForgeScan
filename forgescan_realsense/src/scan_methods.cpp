@@ -65,6 +65,7 @@ void ScanMethods::runTurnTableReconstruction(
     forge_scan::Extrinsic camera_pose;
 
     manager->policyAdd("--set-active --type Axis --n-views 7 --n-repeat 3 --x -1.0 --y -1.0 --z -1.0 --seed 50 --uniform");
+    int picture_num = 0;
         while(!manager->policyIsComplete())
         {
             auto pose_request = std::make_shared<forgescan_realsense::srv::CameraPose::Request>();
@@ -84,6 +85,7 @@ void ScanMethods::runTurnTableReconstruction(
             camera_pose.orientation.w = quat.w();
 
             pose_request->pose = camera_pose;
+            pose_request->picture_number = picture_num;
 
             //Add movement to move robot to position
 
@@ -109,6 +111,7 @@ void ScanMethods::runTurnTableReconstruction(
             manager->reconstructionUpdate(sensed_points, camera->getExtr());
 
             manager->policyAcceptView();
+            picture_num++;
         }
         RCLCPP_INFO(node->get_logger(), "Successfully finished Reconstruction");
 }
