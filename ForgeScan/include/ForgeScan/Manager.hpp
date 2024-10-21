@@ -15,6 +15,7 @@
 #include "ForgeScan/Metrics/Constructor.hpp"
 #include "ForgeScan/Policies/Constructor.hpp"
 #include "ForgeScan/Data/Reconstruction.hpp"
+#include "ForgeScan/Data/VoxelStep.hpp"
 #include "ForgeScan/Utilities/ArgParser.hpp"
 #include "ForgeScan/Utilities/Files.hpp"
 #include "ForgeScan/Utilities/XDMF.hpp"
@@ -255,6 +256,20 @@ public:
         return this->reconstruction_update_count;
     }
 
+    size_t getGreedyVoxelStep(const PointMatrix& sensed_points, const Point& origin)
+    {
+        std::vector<size_t> firstRet;
+        std::shared_ptr<data::VoxelStep> voxelStepper = forge_scan::data::VoxelStep::create();
+        for(const auto& sensed : sensed_points.colwise())
+        {
+            firstRet = voxelStepper->greedyStepVoxels(this->reconstruction, sensed, origin);
+            if(firstRet.size()!=0)
+            {
+                std::cout << "Length of Ray After: " << firstRet.size() << std::endl;
+            }
+        }
+        return firstRet.size();
+    }
 
 
     // ***************************************************************************************** //

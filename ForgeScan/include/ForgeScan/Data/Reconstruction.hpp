@@ -52,8 +52,6 @@ class Reconstruction
 
     /// @details Required to add/remove Policy-specific channels.
     friend class policies::Policy;
-
-
 public:
     // ***************************************************************************************** //
     // *                                 PUBLIC CLASS METHODS                                  * //
@@ -167,6 +165,16 @@ public:
             }
         }
         return false;
+    }
+
+    float getMinDist() const
+    {
+        return this->min_dist_min;
+    }
+
+    float getMaxDist() const
+    {
+        return this->max_dist_max;
     }
 
 
