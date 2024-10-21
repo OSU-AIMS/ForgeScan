@@ -91,6 +91,7 @@ int main(const int argc, const char **argv)
     forge_scan::utilities::Timer timer;
 
     forge_scan::PointMatrix sensed_points;
+    forge_scan::TriangleVector sensed_triangles;
     size_t n = 0;
 
     timer.start();
@@ -116,7 +117,7 @@ int main(const int argc, const char **argv)
                 forge_scan::sensor::DepthImageProcessing::imwrite(camera, image_fpath);
             }
 
-            camera->getPointMatrix(sensed_points);
+            camera->getPointMatrix(sensed_points, sensed_triangles);
             manager->reconstructionUpdate(sensed_points, camera->getExtr());
 
             std::cout << "Added view: " << n++ << std::endl;

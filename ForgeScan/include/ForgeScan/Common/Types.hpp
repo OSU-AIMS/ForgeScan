@@ -16,6 +16,9 @@ namespace forge_scan {
 /// @note Can be mapped to/from OpenCV. See: https://stackoverflow.com/a/21706778
 typedef Eigen::MatrixXf DepthImage;
 
+/// @brief represents the corresponding triangles hit by each pixel.
+typedef Eigen::MatrixXf TriangleImage;
+
 
 /// @brief Index of a voxel within a Grid.
 typedef Eigen::Matrix<size_t, 3, 1> Index;
@@ -35,6 +38,9 @@ typedef Eigen::Transform<float, 3, Eigen::Isometry> Extrinsic;
 
 /// @brief Collection of location in 3D space in the same reference frame. Shaped 3xN.
 typedef Eigen::Matrix3Xf PointMatrix;
+
+/// @brief List of all corresponding Triangle IDs to Point Matrix values.
+typedef Eigen::VectorXf TriangleVector;
 
 
 /// @brief Location in 3D space.

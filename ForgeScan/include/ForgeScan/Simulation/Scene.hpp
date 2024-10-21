@@ -187,11 +187,14 @@ public:
         camera->resetDepth(1.0f);
 
         open3d::core::Tensor rays = Scene::getCameraRays(camera, camera_pose * camera->extr);
-
         auto result = this->o3d_scene.CastRays(rays);
         camera->image = open3d::core::eigen_converter::TensorToEigenMatrixXf(result["t_hit"]);
+        camera->triangle_image = open3d::core::eigen_converter::TensorToEigenMatrixXf(result["primitive_ids"]);
         camera->addNoise();
     }
+
+    //https://www.open3d.org/docs/latest/python_api/open3d.t.geometry.RaycastingScene.html
+    //result[primitive_ids] will give back the triangles hit by the ray from the stl file
 
 
 

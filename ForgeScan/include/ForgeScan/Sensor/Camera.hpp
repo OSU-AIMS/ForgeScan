@@ -122,7 +122,6 @@ struct Camera : public Entity
         this->transformBodyFrame(Tws);
     }
 
-
     /// @brief Turns the Camera's depth image into a list of Points, relative to the camera's frame.
     /// @param [out] dest Matrix to store the depth image's Points in.
     void getPointMatrix(PointMatrix& dest)
@@ -140,6 +139,28 @@ struct Camera : public Entity
             }
         }
     }
+
+    /// @brief Turns the Camera's depth image into a list of Points, relative to the camera's frame.
+    /// @param [out] dest Matrix to store the depth image's Points in.
+    /// @param [out] vec Vector to store all Triangle ID's that correspond to Point Matrix values
+    void getPointMatrix(PointMatrix& dest, TriangleVector& vec)
+    {
+        dest.setConstant(3, this->intr->size(), 0);
+        vec.setConstant(this->intr->size(), 0);
+        size_t n = 0;
+        Point xyz;
+        for (size_t row = 0; row < this->intr->height; ++row)
+        {
+            for (size_t col = 0; col < this->intr->width; ++col)
+            {
+                this->getPoint(row, col, xyz);
+                dest.col(n) << xyz;
+                vec(n) = this->triangle_image(row, col);
+                ++n;
+            }
+        }
+    }
+
 
 
     /// @brief Extracts a 3D point from a pixel in a depth image.
@@ -259,6 +280,8 @@ struct Camera : public Entity
 
     /// @brief The depth image which the camera takes
     DepthImage image;
+
+    TriangleImage triangle_image;
 
 
 private:
