@@ -1,3 +1,6 @@
 [submodule "deps/HighFive"]
 	path = ForgeScan/deps/HighFive
 	url = https://github.com/BlueBrain/HighFive.git
+[submodule "realsense-ros"]
+	path = realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
