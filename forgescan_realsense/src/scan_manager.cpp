@@ -16,14 +16,17 @@
 
 #include "scan_methods.hpp"
 
-/*
-*  A ROS 2 Node to handle the Scan Manager module of ForgeScan
-*  Creates Reconstruction Service that runs an "axis" view selection reconstruction
-*  with 7 views at 3 tilts 
-*
-*  Creates Two Clients for camera_capture service and camera_intrinsics service. 
-*
-*/
+/**
+ * @brief A ROS 2 Node to handle the Scan Manager module of ForgeScan
+ * Creates Reconstruction Service that runs an "axis" view selection reconstruction
+ * with 7 views at 3 tilts.
+ * Adds 8 different channels for visualization with Paraview
+ * 
+ * Manager object is the main manager that is found in ForgeScan, this handles all parts of a backwards reconstruction.
+ * 
+ * Creates Two Clients for camera_capture service and camera_intrinsics service. 
+ * 
+ */
 class ScanManager : public rclcpp::Node
 {
     public:
@@ -60,6 +63,7 @@ class ScanManager : public rclcpp::Node
         {
             std::filesystem::path save_fpath  = std::filesystem::current_path() / "src/forgescan_realsense/reconstructions/reconstruction";
             ScanMethods scan_methods;
+
             //Setting up ros clients/requests
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("image_client");
             rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client = 
@@ -67,27 +71,10 @@ class ScanManager : public rclcpp::Node
             rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_client = 
                 node->create_client<forgescan_realsense::srv::Intrinsics>("/camera/forgescan_realsense/camera_intrinsics");
             auto pose_request = std::make_shared<forgescan_realsense::srv::CameraPose::Request>();
-            auto intrinsics_request = std::make_shared<forgescan_realsense::srv::Intrinsics::Request>();
 
-            auto result = intrinsics_client->async_send_request(intrinsics_request);
-            if (result.valid() && rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS) 
-            {
-                auto intrinsics_result = result.get();
-                intr = forge_scan::sensor::Intrinsics::create(
-                    intrinsics_result->width, intrinsics_result->height, 
-                    intrinsics_result->mindepth, intrinsics_result->maxdepth, 
-                    intrinsics_result->fovx, intrinsics_result->fovy);
-                RCLCPP_INFO(this->get_logger(), "Successfully retrieved intrinsics");
-            } 
-            else 
-            {
-                RCLCPP_ERROR(this->get_logger(), "Failed to retrieve intrinsics values, using defaults");
-                intr = forge_scan::sensor::Intrinsics::create();
-            }
-
+            auto intr = scan_methods.try_to_get_camera_intrinsics(node, intrinsics_client);
             auto manager_node = std::make_shared<ScanManager>();
             scan_methods.runTurnTableReconstruction(node, intr, manager, image_client);
-
             auto updated_fpath = manager->save(save_fpath);
         }
 

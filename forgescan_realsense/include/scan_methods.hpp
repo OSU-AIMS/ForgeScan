@@ -8,6 +8,7 @@
 #include <Eigen/Dense>
 #include "rclcpp/rclcpp.hpp"
 #include "forgescan_realsense/srv/camera_pose.hpp"
+#include "forgescan_realsense/srv/intrinsics.hpp"
 
 #include "ForgeScan/Sensor/Camera.hpp"
 #include "ForgeScan/Manager.hpp"
@@ -21,6 +22,15 @@ public:
         const std::shared_ptr<forge_scan::sensor::Intrinsics> intr, 
         const std::shared_ptr<forge_scan::Manager> manager, 
         const rclcpp::Client<forgescan_realsense::srv::CameraPose>::SharedPtr image_client
+    );
+
+    Eigen::Isometry3f rosPoseToIsometry(geometry_msgs::msg::Pose);
+
+    geometry_msgs::msg::Pose isometryToRosPose(Eigen::Isometry3f pose);
+
+    std::shared_ptr<forge_scan::sensor::Intrinsics> try_to_get_camera_intrinsics(
+    const std::shared_ptr<rclcpp::Node> node,
+    const rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr intrinsics_client
     );
 };
 #endif 

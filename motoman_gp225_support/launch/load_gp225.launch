@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <arg name="robot_description" default="$(command 'xacro $(find-pkg-share motoman_gp225_support)/urdf/gp225.xacro')" description="[String] Path to URDF." />
-</launch>

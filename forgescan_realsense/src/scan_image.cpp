@@ -11,7 +11,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_srvs/srv/empty.hpp"
 #include "geometry_msgs/msg/pose.hpp"
-#include <librealsense2/rs.hpp>
 
 #include "forgescan_realsense/srv/camera_pose.hpp"
 #include "forgescan_realsense/msg/eigen_vector.hpp"
@@ -58,31 +57,10 @@ class ScanImage : public rclcpp::Node
             std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("intrinsics_client");
             rclcpp::Client<forgescan_realsense::srv::Intrinsics>::SharedPtr client = 
                 node->create_client<forgescan_realsense::srv::Intrinsics>("/camera/forgescan_realsense/camera_intrinsics");
-            auto empty_request = std::make_shared<forgescan_realsense::srv::Intrinsics::Request>();
-            auto result = client->async_send_request(empty_request);
-
-            if (result.valid() && rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS) 
-            {
-                auto intrinsics_result = result.get();
-                intr = forge_scan::sensor::Intrinsics::create(
-                    intrinsics_result->width, intrinsics_result->height, 
-                    intrinsics_result->mindepth, intrinsics_result->maxdepth, 
-                    intrinsics_result->fovx, intrinsics_result->fovy);
-            } 
-            else 
-            {
-                RCLCPP_ERROR(this->get_logger(), "Failed to retrieve intrinsics values, using defaults");
-                intr = forge_scan::sensor::Intrinsics::create();
-            }
-
+            auto intr = scan_methods.try_to_get_camera_intrinsics(node, client);
             camera = forge_scan::sensor::Camera::create(intr, 0.0, 100);
 
-            geometry_msgs::msg::Pose pose = request->pose;
-            Eigen::Quaternionf quat(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z);
-            transformation_matrix.setIdentity();
-            transformation_matrix.block<3,3>(0,0) = quat.matrix();
-            transformation_matrix.block<3,1>(0,3) = Eigen::Vector3f(pose.position.x, pose.position.y, pose.position.z);
-            Eigen::Isometry3f camera_pose = Eigen::Isometry3f(transformation_matrix);
+            auto camera_pose = scan_methods.rosPoseToIsometry(request->pose);
             camera->setExtr(camera_pose);
 
             Eigen::MatrixXf eigen_image = scan_methods.messageToEigen(camera_image);
@@ -90,7 +68,6 @@ class ScanImage : public rclcpp::Node
             camera->getPointsFromImageAndIntrinsics(camera->getIntr(), eigen_image, sensed_points);
 
             response->eigenmatrix.resize(sensed_points.cols());
-            response->length = sensed_points.cols();
             for(int i = 0; i<sensed_points.cols(); i++)
             {
                 response->eigenmatrix[i].x = sensed_points.col(i).x();
@@ -99,7 +76,6 @@ class ScanImage : public rclcpp::Node
             }
 
             RCLCPP_INFO(this->get_logger(), "Successfully took picture #%ld", request->picture_number);
-            //Add topic for current picture #?
         }
 
         /**

@@ -21,11 +21,16 @@
         <param name="robot_description" value="$(var robot_description)" />
     </node>
 
+    <!-- Realsense Node to connect to D455 Realsense Camera -->
     <node pkg="realsense2_camera" exec="realsense2_camera_node">
+        <!-- Remaps depth image topic to forgescan_realsense namespace-->
         <remap from="/camera/camera/depth/image_rect_raw" to="forgescan_realsense/camera_image"/>
     </node>
 
+    <!-- Handles all nessasary data from realsense camera node -->
     <node pkg="forgescan_realsense" exec="realsense_handler"/>
+    <!-- Manages Reconstruction Service Implemented by ForgeScan -->
     <node pkg="forgescan_realsense" exec="scan_manager"/>
+    <!-- Handles the Camera Module of Forgescan -->
     <node pkg="forgescan_realsense" exec="scan_image"/>
 </launch>

@@ -12,7 +12,8 @@
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
   <depend>cv_bridge</depend>
-  <depend>OpenCV</depend>
+  <depend>opencv2</depend>
+  <depend>librealsense2</depend>
 
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
 

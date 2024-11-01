@@ -22,6 +22,10 @@
 
 using namespace std::chrono_literals;
 
+/**
+ * @brief 
+ * 
+ */
 class RealsenseHandler : public rclcpp::Node
 {
     public:
@@ -41,6 +45,12 @@ class RealsenseHandler : public rclcpp::Node
         }
 
     private:
+        /**
+         * @brief Gets data stored in Intrinsics Message variable as a service call. Message data is recieved from a topic but needed as a service.
+         * 
+         * @param request The request message which is empty
+         * @param response The response message which contains all camera intrinsics
+         */
         void intrinsics_callback(const std::shared_ptr<forgescan_realsense::srv::Intrinsics::Request> request,
                 std::shared_ptr<forgescan_realsense::srv::Intrinsics::Response> response)
         {
@@ -52,6 +62,11 @@ class RealsenseHandler : public rclcpp::Node
             response->fovy = message.fovy;
         }
 
+        /**
+         * @brief Sets Local Intrinsics Message Variable with data from camera/depth/camera_info topic
+         * 
+         * @param msg the camera intrinsics message data
+         */
         void realsense_intrinsics_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg)
         {
             message.width = msg->width;
@@ -62,6 +77,12 @@ class RealsenseHandler : public rclcpp::Node
             message.fovy = (2 * atan ((message.height)/(2*msg->k[4]))) * 180 / M_PI;
         }
 
+        /**
+         * @brief Gets the transform between two tf frames, defaults to "camera_link" and "object_ bounding_link"
+         * 
+         * @param request a request message with the "toFrame" and "fromFrame"
+         * @param response 
+         */
         void get_transform(const std::shared_ptr<forgescan_realsense::srv::ToTransform::Request> request,
                 std::shared_ptr<forgescan_realsense::srv::ToTransform::Response> response)
         {

@@ -4,6 +4,15 @@
 
 .vscode/*
 
+## ---------------------- ## 
+## ForgeScan Dependencies ##
+## ---------------------- ##
+
+realsense_ros
+motoman_gp225_support
+motoman_ms210_support
+motoman_resources
+
 ## ----------------- ## 
 ## ForgeScan Folders ##
 ## ----------------- ##

@@ -82,8 +82,7 @@ include_directories(
     ${HDF5_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${cv_bridge_INCLUDE_DIRS}
-    /usr/include/hdf5/serial
-    /usr/include/eigen3
+    ${EIGEN3_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/../ForgeScan/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../ForgeScan/deps/HighFive/include
 )

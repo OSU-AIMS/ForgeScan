@@ -2,4 +2,3 @@ geometry_msgs/Pose pose
 int64 picture_number
 ---
 EigenVector[] eigenmatrix
-int64 length
