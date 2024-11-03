@@ -27,8 +27,6 @@ a research tool in its alpha version.** An updated library based on this will be
 
 ## Getting Started
 
-Project documentation is available [here](schellenberg3.github.io/ForgeScan/).
-
 Docker files are [provided](./docker/README.md) with a description and documentation of the
 packages required for developing this code on linux systems[^1].
 
