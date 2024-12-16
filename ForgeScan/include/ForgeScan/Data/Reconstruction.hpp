@@ -76,9 +76,9 @@ public:
     /// @note Both `sensed` and `origin` are assumed to be in the Reconstruction's reference frame.
     void update(const PointMatrix& sensed_points, const Point& origin)
     {
-        for (const auto& sensed : sensed_points.colwise())
+        for (int i = 0; i < sensed_points.cols(); i++)
         {
-            if(get_ray_trace(this->ray_trace, sensed, origin, this->grid_properties,
+            if(get_ray_trace(this->ray_trace, sensed_points.col(i), origin, this->grid_properties,
                              this->min_dist_min, this->max_dist_max))
             {
                 for (auto it = this->ray_trace->first_above(0.0f); it != this->ray_trace->end(); ++it)

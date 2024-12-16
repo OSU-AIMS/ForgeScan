@@ -58,8 +58,8 @@ class ScanManager : public rclcpp::Node
          * 
          * @param response: Empty Service Response
          */
-        void run_reconstruction(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
-            std::shared_ptr<std_srvs::srv::Empty::Response> response)
+        void run_reconstruction(const std::shared_ptr<std_srvs::srv::Empty::Request>,
+            std::shared_ptr<std_srvs::srv::Empty::Response>)
         {
             std::filesystem::path save_fpath  = std::filesystem::current_path() / "src/forgescan_realsense/reconstructions/reconstruction";
             ScanMethods scan_methods;

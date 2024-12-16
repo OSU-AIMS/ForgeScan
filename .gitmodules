@@ -1,3 +1,0 @@
-[submodule "deps/HighFive"]
-	path = ForgeScan/deps/HighFive
-	url = https://github.com/BlueBrain/HighFive.git

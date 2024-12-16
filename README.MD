@@ -71,3 +71,13 @@ The RViz visualization depends on motoman support packages, please configure the
 The current setup works with the [motorman_ms210_support] (https://github.com/EricMarcil/motoman/tree/GP225) package found in Eric Marcil's repo.
 
 Please note that this requires [motoman_resources] (https://github.com/OSU-AIMS/aims-robots-all) which is found internally in aims-robots-all
+
+### OpenCV2
+
+OpenCV2 needs to be built from source according to the following [instructions] (https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+
+## Examples
+
+For basic example of functions, please see the ForgeScan/src/Examples to use ForgeScan
+
+For examples of ROS related uses, please call the run_reconstructions service from the scan_manager node.

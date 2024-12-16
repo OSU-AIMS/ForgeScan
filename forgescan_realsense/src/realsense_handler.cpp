@@ -51,7 +51,7 @@ class RealsenseHandler : public rclcpp::Node
          * @param request The request message which is empty
          * @param response The response message which contains all camera intrinsics
          */
-        void intrinsics_callback(const std::shared_ptr<forgescan_realsense::srv::Intrinsics::Request> request,
+        void intrinsics_callback(const std::shared_ptr<forgescan_realsense::srv::Intrinsics::Request>,
                 std::shared_ptr<forgescan_realsense::srv::Intrinsics::Response> response)
         {
             response->width = message.width;
