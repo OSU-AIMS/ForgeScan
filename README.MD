@@ -5,7 +5,7 @@
 
 ## FORGESCAN DOCUMENTATION
 
-[ForgeScan Github.io] (https://schellenberg3.github.io/ForgeScan/)
+[ForgeScan Github.io](https://schellenberg3.github.io/ForgeScan/)
 
 ## Dependencies
 
@@ -72,13 +72,13 @@ Given that this is a realsense wrapper for an existing package, it is dependent 
 ### Motoman Packages
 The RViz visualization depends on motoman support packages, please configure the scene.urdf.xacro with a desired robot.
 
-The current setup works with the [motorman_ms210_support] (https://github.com/EricMarcil/motoman/tree/GP225) package found in Eric Marcil's repo.
+The current setup works with the [motorman_ms210_support](https://github.com/EricMarcil/motoman/tree/GP225) package found in Eric Marcil's repo.
 
-Please note that this requires [motoman_resources] (https://github.com/OSU-AIMS/aims-robots-all) which is found internally in aims-robots-all
+Please note that this requires [motoman_resources](https://github.com/OSU-AIMS/aims-robots-all) which is found internally in aims-robots-all
 
 ### OpenCV2
 
-OpenCV2 needs to be built from source according to the following [instructions] (https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+OpenCV2 needs to be built from source according to the following [instructions](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
 
 ## Examples
 
