@@ -4,6 +4,14 @@
 
 .vscode/*
 
+## --------------------- ## 
+## ROS Built Directories ##
+## --------------------- ##
+
+install/*
+build/*
+log/*
+
 ## ---------------------- ## 
 ## ForgeScan Dependencies ##
 ## ---------------------- ##
