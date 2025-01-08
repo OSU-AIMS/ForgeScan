@@ -1,14 +1,51 @@
 ## ------------------------ ##
 ## Project Specific Folders ##
 ## ------------------------ ##
-bin/*
-lib/*
-build/*
-scripts/plots/*
-.vscode/*
-.devcontainer/*
-.pylintrc
 
+.vscode/*
+
+## --------------------- ## 
+## ROS Built Directories ##
+## --------------------- ##
+
+install/*
+build/*
+log/*
+
+## ---------------------- ## 
+## ForgeScan Dependencies ##
+## ---------------------- ##
+
+realsense_ros
+motoman_gp225_support
+motoman_ms210_support
+motoman_resources
+
+## ----------------- ## 
+## ForgeScan Folders ##
+## ----------------- ##
+
+ForgeScan/bin
+ForgeScan/install/*
+ForgeScan/share/*
+ForgeScan/.vscode/*
+ForgeScan/log/*
+ForgeScan/scripts/plots/*
+ForgeScan/.vscode/*
+ForgeScan/.devcontainer/*
+ForgeScan/.pylintrc
+**/CMakeFiles
+
+## --------------- ##
+## ForgeScan Files ##
+## --------------- ##
+
+ForgeScan/CMakeCache.txt
+ForgeScan/CMakeDoxyfile.in
+ForgeScan/Makefile
+**/Makefile
+
+*.cmake
 *.h5
 *.xdmf
 

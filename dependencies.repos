@@ -1,0 +1,8 @@
+repositories:
+    realsense_ros:
+        type: git
+        url: https://github.com/IntelRealSense/realsense-ros.git
+        version: ros2-master
+    ForgeScan/deps/HighFive:
+        type: git
+        url: https://github.com/BlueBrain/HighFive.git
