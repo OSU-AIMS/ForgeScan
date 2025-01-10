@@ -16,9 +16,10 @@ int main(const int argc, const char **argv)
 
     auto scene = forge_scan::simulation::GroundTruthScene::create(scene_lower_bound);
 
-    scene->add("--file abc2.stl --x -0.5 --scale  5.0");
-    scene->add("--file abc3.stl --y -0.5 --scale 25.0");
-    scene->add("--file abc4.stl --z  0.5 --scale  8.0");
+    scene->add("--file plain_football_box.obj --x -0.5 --scale 5.0");
+    // scene->add("--file abc2.stl --x -0.5 --scale  5.0");
+    // scene->add("--file abc3.stl --y -0.5 --scale 25.0");
+    // scene->add("--file abc4.stl --z  0.5 --scale  8.0");
 
 
     // // ****************************** Calculate the ground truth ******************************* //

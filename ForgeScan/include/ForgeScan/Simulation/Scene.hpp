@@ -346,6 +346,17 @@ public:
         return true_tsdf;
     }
 
+    std::map<uint32_t, std::pair<MeshInfo, open3d::t::geometry::TriangleMesh>> getMeshMap()
+    {
+        return mesh_map;
+    }
+
+    void setMeshMap(std::map<uint32_t, std::pair<MeshInfo, open3d::t::geometry::TriangleMesh>> new_map)
+    {
+        this->mesh_map = new_map;
+    }
+
+
 
 protected:
     // ***************************************************************************************** //

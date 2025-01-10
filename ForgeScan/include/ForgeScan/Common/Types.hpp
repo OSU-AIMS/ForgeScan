@@ -35,6 +35,9 @@ typedef Eigen::Matrix<size_t, 3, 1> GridSize;
 /// @brief Transformation matrix from the world coordinate system to an entity's local coordinate system.
 typedef Eigen::Transform<float, 3, Eigen::Isometry> Extrinsic;
 
+/// @brief Collection of transformation matrices. Shaped 4xN
+typedef Eigen::Matrix4Xf ComparisonMatrix;
+
 
 /// @brief Collection of location in 3D space in the same reference frame. Shaped 3xN.
 typedef Eigen::Matrix3Xf PointMatrix;

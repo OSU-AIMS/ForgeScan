@@ -10,8 +10,6 @@ add_library(
 target_compile_definitions(
     ${DEFNITIONS_LIBRARY}
     INTERFACE
-        # The below two paths are absolute paths, needs to be changed to relative pathing later but for purposes of
-        # testing ForgeScan as a whole.
         FORGE_SCAN_SHARE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../share"
         FORGE_SCAN_MESHES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../share/Meshes"
 )
